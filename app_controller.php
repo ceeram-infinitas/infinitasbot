@@ -37,5 +37,9 @@
  * @subpackage	cake.app
  */
 class AppController extends Controller {
+	var $components = array('Cookie');
+	var $cookieName = 'CakePHP_IRC';
+	var $cookieKey = 'yo$Gie3ae$pieheyaz';
+	var $cookieDomain = '';
 }
 ?>
