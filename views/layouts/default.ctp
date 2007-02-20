@@ -14,7 +14,7 @@ if(isset($javascript)):
 endif;
 ?>
 </head>
-<body class="main">
+<body class="main" onload="document.login.nick.focus();">
   <div id="container">
 		<div id="header">
 			<h1 class="logo">
@@ -32,7 +32,7 @@ endif;
 					<li><a href="http://cakeforge.org"><span>CakeForge</span></a></li>
 				</ul>
 			</div> <!-- #navigation -->
-			<?php echo $this->renderElement('menu')?>
+			<?php //echo $this->renderElement('menu')?>
 			<h1>IRC Gateway</h1>
 		</div> <!-- #header -->
 		<div id="content">
@@ -44,17 +44,11 @@ endif;
 			<p>
 				CakePHP : <a href="http://www.cakefoundation.org/pages/copyright/">&copy; 2007 Cake Software Foundation, Inc.</a>
 			</p>
-				<a href="http://www.w3c.org/" target="_new">
-					<?php echo $html->image('w3c_css.png', array('alt'=>"valid css", 'border'=>"0"))?>
-				</a>
-				<a href="http://www.w3c.org/" target="_new">
-					<?php echo $html->image('w3c_xhtml10.png', array('alt'=>"valid xhtml", 'border'=>"0"))?>
-				</a>
-				<a href="http://www.cakephp.org/" target="_new">
-					<?php echo $html->image('cake.power.png', array('alt'=>"CakePHP : Rapid Development Framework", 'border'=>"0"))?>
-				</a>
-			</div>
-			<?php echo $cakeDebug;?>
+			<a href="http://www.cakephp.org/" target="_new">
+				<?php echo $html->image('cake.power.png', array('alt'=>"CakePHP : Rapid Development Framework", 'border'=>"0"))?>
+			</a>
+		</div>
+		<?php echo $cakeDebug;?>
 	</div> <!-- #container -->
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id:$ */
+/* SVN FILE: $Id$ */
 class IrcController extends AppController {
 	var $name = "Irc";
 	var $helpers = array('Javascript', 'Form');
@@ -16,7 +16,7 @@ class IrcController extends AppController {
 	function index() {
 		$args = func_get_args();
 
-		$this->layout = null;
+		$this->layout = 'default';
 		$age = $this->__age();
 		$font = $this->font;
 		$size = $this->size;
