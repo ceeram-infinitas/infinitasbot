@@ -14,7 +14,7 @@ if(isset($javascript)):
 endif;
 ?>
 </head>
-<body class="main" onload="document.login.nick.focus();">
+<body class="main" onload="document.getElementById('IrcNick').focus();">
   <div id="container">
 		<div id="header">
 			<h1 class="logo">
@@ -32,8 +32,8 @@ endif;
 					<li><a href="http://cakeforge.org"><span>CakeForge</span></a></li>
 				</ul>
 			</div> <!-- #navigation -->
-			<?php //echo $this->renderElement('menu')?>
 			<h1>IRC Gateway</h1>
+			<?php echo $this->renderElement('menu')?>
 		</div> <!-- #header -->
 		<div id="content">
 				<?php if ($session->check('Message.flash')) $this->controller->Session->flash(); ?>
