@@ -13,6 +13,9 @@
 		background-color: #FFFFFF; z-index: 0;
 	}
 --></style>
+<p>
+Please note, you WILL get a security confirmation dialog when you first launch this applet. This is because it has not been digitally signed using an arcane ritual involving sheep and stuff. The main reason this happens is that the applet will be connecting to a server (irc.freenode.org) which is not the server that this web site is hosted on (irc.cakephp.org), so it wants permission to do so. It is a perfectly safe applet to run.
+</p>
 <div class="invisible"><h1>CakePHP</h1></div>
 <script type="text/javascript"><!--
 	document.write(JavaCheck());
