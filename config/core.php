@@ -49,7 +49,7 @@
  * With the other debug levels you get to click the "flash message" to continue.
  *
  */
-	define('DEBUG', 2);
+	define('DEBUG', 0);
 /**
  * Turn of caching checking wide.
  * You must still use the controller var cacheAction inside you controller class.
@@ -86,7 +86,7 @@
  * Set a random string of used in session.
  *
  */
-	define('CAKE_SESSION_STRING', 'DYhG93b0qyJfIxfs2guVoUubWwvniR2G0FgaC9mi');
+	define('CAKE_SESSION_STRING', 'ubWwvniR2G0G93b0qDYhs2guVoUyJfIxfFgaC9mi');
 /**
  * Set the name of session cookie
  *
