@@ -24,7 +24,7 @@ Please note, you WILL get a security confirmation dialog when you first launch t
 	document.write(WriteLayer('Chat Page is loading...'));
 --></script>
 <?php
-	echo $form->create('Irc', array('name'=>'login', 'action'=>'chat', 'onsubmit'=>"return CheckForm('/irc/index/$advanced')"));
+	echo $form->create(false, array('name'=>'login', 'action'=>'chat', 'onsubmit'=>"return CheckForm('/irc/index/$advanced')"));
 ?>
 
 				<script type="text/javascript"><!--
