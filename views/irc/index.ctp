@@ -35,24 +35,24 @@ Please note, you WILL get a security confirmation dialog when you first launch t
 
 
 <?php
-	echo $form->input('nick');
+	echo $form->input('Irc.nick');
 	if($advanced):
-		echo $form->input('password');
+		echo $form->input('Irc.password');
 
-		echo $form->input('channel', array('options' => $channels));
-		echo $form->input('server', array('options' => $servers));
-		//echo $form->input('style', array('options' => $colorsets));
+		echo $form->input('Irc.channel', array('options' => $channels));
+		echo $form->input('Irc.server', array('options' => $servers));
+		//echo $form->input('Irc.style', array('options' => $colorsets));
 
-		echo $form->input('font', array('options' => $fonts));
-		echo $form->input('size', array('options' => $sizes));
-		echo $form->input('sex', array('options' => $sexes));
-		echo $form->input('age', array('options' => $ages));
-		echo $form->input('location');
+		echo $form->input('Irc.font', array('options' => $fonts));
+		echo $form->input('Irc.size', array('options' => $sizes));
+		echo $form->input('Irc.sex', array('options' => $sexes));
+		echo $form->input('Irc.age', array('options' => $ages));
+		echo $form->input('Irc.location');
 	endif;
-		echo $form->input('smileys', array('label'=>'Display Smileys','type'=>'checkbox', 'value'=>'1'));
+		echo $form->input('Irc.smileys', array('label'=>'Display Smileys','type'=>'checkbox', 'value'=>'1'));
 	if($advanced):
 
-		echo $form->input('save', array('label'=>'Save Settings', 'type'=>'checkbox', 'value'=>'1'));
+		echo $form->input('Irc.save', array('label'=>'Save Settings', 'type'=>'checkbox', 'value'=>'1'));
 	endif;
 	echo $form->submit('Connect');
 ?>
