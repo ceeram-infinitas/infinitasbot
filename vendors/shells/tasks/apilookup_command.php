@@ -86,7 +86,7 @@ class ApilookupCommandTask extends Object {
  * @access public
  */
 	function execute() {
-		$apilookupURL = "%s: http://api.cakephp.org/search/%s";
+		$apilookupURL = "%s: http://changeme.com/%s";
 		$queryString = '';
 		$counter = 0;
 		$args = func_get_args();

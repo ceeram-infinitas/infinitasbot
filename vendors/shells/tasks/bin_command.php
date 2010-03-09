@@ -62,7 +62,7 @@ class BinCommandTask extends Object {
  * @access public
  */
 	function execute($userName) {
-		return "Please paste some code in here ----> http://bin.cakephp.org/add/$userName then post the url in the channel";
+		return "Please paste some code in here ----> >	http://infinitas.codepad.org/ then post the url in the channel";
 	}
 }
 ?>

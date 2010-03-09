@@ -66,10 +66,10 @@ class TracCommandTask extends Object {
 		if (func_num_args() > 1) {
 			$args = func_get_args();
 			$searchString = str_replace("#", "", $args[1]);
-			$url =  sprintf( "https://trac.cakephp.org/ticket/%s", urlencode($searchString));
+			$url =  sprintf( "https://changeme.com/%s", urlencode($searchString));
 			return "To view this ticket go here: $url";
 		} else {
-			return "CakePHP development information can be found at https://trac.cakephp.org";
+			return "CakePHP development information can be found at https://changeme.com";
 		}
 	}
 }

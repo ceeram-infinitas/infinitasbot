@@ -66,7 +66,7 @@ class SVNCommandTask extends Object {
 		if (function_exists("svn_log")) {
 			if (func_num_args() > 1) {
 				$args = func_get_args();
-				$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/", $args[1] );
+				$log = $this->svn_log_limit ( "https://changeme.com/", $args[1] );
 				if ($log) {
 					$lastRevision = $log[0]['rev'];
 					return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
@@ -74,12 +74,12 @@ class SVNCommandTask extends Object {
 					return "Revision $args[1] is not a valid revision";
 				}
 			} else {
-				$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/" );
+				$log = $this->svn_log_limit ( "https://changeme.com/" );
 				$lastRevision = $log[0]['rev'];
 				return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
 			}
 		} else {
-			return "svn is https://svn.cakephp.org/repo/";
+			return "svn is https://changeme.com/";
 		}
 	}
 /**

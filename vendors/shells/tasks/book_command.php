@@ -31,10 +31,10 @@ class BookCommandTask extends Object {
 	function execute() {
 		if (func_num_args() > 1) {
 			$q = implode(array_splice(func_get_args(), 1), '+');
-			$url =  sprintf( "http://book.cakephp.org/search/%s", $q);
+			$url =  sprintf( "http://changeme.com/search/%s", $q);
 			return $url;
 		} else {
-			return "Book is http://book.cakephp.org the answer to life, the universe and all your bun making needs.";
+			return "Book is http://changeme.com the answer to life, the universe and all your bun making needs.";
 		}
 	}
 }

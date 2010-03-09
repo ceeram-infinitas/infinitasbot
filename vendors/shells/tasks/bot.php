@@ -25,7 +25,8 @@
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
-App::import('Core', 'Socket');
+//App::import('Core', 'Socket'); for versions < 1.3
+App::import('Core', 'CakeSocket'); // for version 1.3
 App::import('Core', 'Set');
 /**
  * BotTask class
@@ -40,7 +41,7 @@ class BotTask extends CakeSocket {
  * @var string
  * @access public
  */
-	var $nick = 'CakeBot';
+	var $nick = 'InfinitasBot';
 /**
  * Internal channel holder
  *
@@ -62,7 +63,7 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	var $channels = array(
-		'#cakephp',
+		'#infinitas',
 	);
 /**
  * Default connection paramiters
@@ -159,6 +160,7 @@ class BotTask extends CakeSocket {
 		}
 		$this->write("NICK {$nick}\r\n");
 		$this->write("USER {$nick} {$this->config['host']} botts : {$nick}\r\n");
+		//$this->write("PRIVMSG NickServ :IDENTIFY nickname password\r\n");
 		return true;
 	}
 /**
@@ -204,20 +206,28 @@ class BotTask extends CakeSocket {
 					list($ping, $pong) = $this->getParams(':', $line, 2);
 					if (isset($pong)) {
 						$this->write("PONG $pong\r\n");
+						//$this->write("PRIVMSG #infinitas :there was a ping\r\n");
 						// Now that we have the pong, maybe put a callback function here ot maybe output regular messages
+						//"PONG #{event.message}PRIVMSG #rubybot :Pong!
+						
 						/*
-						if ($messages = call_user_func($this->callback)) {
-							pr($messages);
-							pr($this->channels);
+						// commented out due to memory crash
+						if ($messages = call_user_func($this->hooks['tickets'])) {
+							//pr($messages);
+							//$this->log(array('channel' => 'testing', 'username' => 'Shell', 'text' => $messages));
+							//$this->write("PRIVMSG #infinitas :message logged\r\n");
+							//pr($this->channels);
 							foreach ($messages as $message) {
 								foreach ($this->channels as $channel) {
-									$this->out("\n\nChannel: '$this->channel'\n\n");
-									$this->write("PRIVMSG {$channel} :{$message}\r\n");
-									$this->out("PRIVMSG {$channel} :{$message}");
+									//$this->out("\n\nChannel: '$channel'\n\n");
+									$this->write("PRIVMSG {$channel} :{$message['text']}\r\n");
+									$this->write("PRIVMSG {$channel} :{$message['link']}\r\n");
+									//$this->out("PRIVMSG {$channel} :{$message}");
 								}
 							}
+							unset($messages, $message, $channel);
 						}
- */
+						*/
 					}
 					unset($ping, $pong); //Php is bad about unsetting things since it's usual scope is one execution and this will help keep the program from filling up the computer
 				} elseif ($line{0} === ':') {
@@ -316,109 +326,161 @@ class BotTask extends CakeSocket {
 			//create an array of the paramiters from the call offset by the location of the first ~
 			$params = explode(" ", substr($msg, strpos($msg, "~") + 1));
 			switch ($params[0]) {
-			case 'seen':
-				//Searching for nothing
-				if(empty($params[1])){
-					return "{$this->requester}: Who are you seeking ?";
-				}
-				//Seen themselvs?
-				if($params[1] == $this->requester){
-					return "{$this->requester}: Hide and seek? Found you!";
-				}
-				//Searching for someone who is active
-				if (in_array($params[1], $this->activeUsers["#$this->channel"])) {
-					return "{$this->requester}: $params[1] is here right now!";
-				}
-				$user = ClassRegistry::init('User');
-				$user = $user->findByUsername($params[1], 'date', 'date desc');
-				App::import('Core', 'Helper');
-				App::import('Helper', 'Time');
-				$time = new TimeHelper();
-				$user = ClassRegistry::init('User');
-				$timeZoneOffset = date('P');
-				$user = $user->findByUsername($params[1], 'date', 'date desc');
-				if (is_array($user) && count($user)) {
-					return "{$this->requester}: I last saw {$params[1]} {$time->timeAgoInWords($user['User']['date'])}";
-				}
-				else {
-					return "{$this->requester}: I haven't seen {$params[1]} in a while";
-				}
-				break;
-			case 'help':
-				if (empty($params[1])) {
-					$this->write("PRIVMSG {$this->requester} :~help all : to see all the tells.\r\n");
-					$this->write("PRIVMSG {$this->requester} :~help <number> to limit the number of commands.\r\n");
-				} else {
-					if (isset($params[1])) {
-						$input = $params[1];
-						$Tell = ClassRegistry::init('Tell');
-						if ($input === 'all' || is_numeric($input)) {
-							$limit = 50;
-							if (is_numeric($input)) {
-								$limit = $input;
-							}
-							$tells = $Tell->find('list', array('fields' => array('Tell.keyword', 'Tell.message'), 'limit' => $limit));
-							//pr($tells);
-							$this->write("PRIVMSG {$this->requester} :The following commands are available:\r\n");
-							$this->write("PRIVMSG {$this->requester} :~<tell> to test it.\r\n");
-							$tells = array_flip($tells);
-							$this->write("PRIVMSG {$this->requester} :forget, seen, ".implode($tells, ", ")."\r\n");
+				case 'register':
+					if(strtolower($this->requester) == 'ceeram' || strtolower($this->requester) == 'dogmatic69'){
+						//$this->write("PRIVMSG NickServ :REGISTER password email@domain.com\r\n");
+						//return "Done";
+						return "Can't register again";
+					}
+					return false;
+					break;
+				case 'bot-op':
+					if(in_array(strtolower($this->requester), array('ceeram', 'dogmatic69'))){
+						$this->write("PRIVMSG ChanServ :OP #infinitas InfinitasBot\r\n");
+					}
+					return false;
+					break;
+				case 'bot-deop':
+					if(in_array(strtolower($this->requester), array('ceeram', 'dogmatic69'))){
+						$this->write("PRIVMSG ChanServ :DEOP #infinitas InfinitasBot\r\n");
+					}
+					return false;
+					break;
+				case 'op':
+					if(in_array(strtolower($this->requester), array('ceeram', 'dogmatic69'))){
+						$this->write("PRIVMSG ChanServ :OP #infinitas " . $this->requester . "\r\n");
+					}
+					return false;
+					break;
+				case 'deop':
+					if(in_array(strtolower($this->requester), array('ceeram', 'dogmatic69'))){
+						$this->write("PRIVMSG ChanServ :DEOP #infinitas " . $this->requester . "\r\n");
+					}
+					return false;
+					break;
+				case 'topic':
+					if(in_array(strtolower($this->requester), array('ceeram', 'dogmatic69')) && !empty($params[1])){
+						unset($params[0]);
+						$topic = implode(' ', $params);
+						$this->write("PRIVMSG ChanServ :TOPIC #infinitas " . $topic . "\r\n");
+					}
+					return false;
+					break;
+				case 'topicappend':
+					if(in_array(strtolower($this->requester), array('ceeram', 'dogmatic69')) && !empty($params[1])){
+						unset($params[0]);
+						$topic = implode(' ', $params);
+						$this->write("PRIVMSG ChanServ :TOPICAPPEND #infinitas " . $topic . "\r\n");
+					}
+					return false;
+					break;
+				case 'seen':
+					//Searching for nothing
+					if(empty($params[1])){
+						return "{$this->requester}: Who are you seeking ?";
+					}
+					//Seen themselvs?
+					if($params[1] == $this->requester){
+						return "{$this->requester}: Hide and seek? Found you!";
+					}
+					//Searching for someone who is active
+					if (in_array($params[1], $this->activeUsers["#$this->channel"])) {
+						return "{$this->requester}: $params[1] is here right now!";
+					}
+					$user = ClassRegistry::init('User');
+					$user = $user->findByUsername($params[1], 'date', 'date desc');
+					App::import('Core', 'Helper');
+					App::import('Helper', 'Time');
+					$time = new TimeHelper();
+					$user = ClassRegistry::init('User');
+					$timeZoneOffset = date('P');
+					$user = $user->findByUsername($params[1], 'date', 'date desc');
+					if (is_array($user) && count($user)) {
+						return "{$this->requester}: I last saw {$params[1]} {$time->timeAgoInWords($user['User']['date'])}";
+					}
+					else {
+						return "{$this->requester}: I haven't seen {$params[1]} in a while";
+					}
+					break;
+				case 'help':
+					if (empty($params[1])) {
+						$this->write("PRIVMSG {$this->requester} :~help all : to see all the tells.\r\n");
+						$this->write("PRIVMSG {$this->requester} :~help <number> to limit the number of commands.\r\n");
+					} else {
+						if (isset($params[1])) {
+							$input = $params[1];
+							$Tell = ClassRegistry::init('Tell');
+							if ($input === 'all' || is_numeric($input)) {
+								$limit = 50;
+								if (is_numeric($input)) {
+									$limit = $input;
+								}
+								$tells = $Tell->find('list', array('fields' => array('Tell.keyword', 'Tell.message'), 'limit' => $limit));
+								//pr($tells);
+								$this->write("PRIVMSG {$this->requester} :The following commands are available:\r\n");
+								$this->write("PRIVMSG {$this->requester} :~<tell> to test it.\r\n");
+								$tells = array_flip($tells);
+								$this->write("PRIVMSG {$this->requester} :seen, bin, google, php, ".implode($tells, ", ")."\r\n");
+							} elseif($input === 'tickets') {
+								return "For more help check: http://help.lighthouseapp.com/faqs/getting-started/how-do-i-search-for-tickets";
 						} else {
 							$message = $Tell->field('message', array('keyword' => $input));
 							if(!empty($message)){
 								$this->write("PRIVMSG {$this->requester} :{$input} is {$message}\r\n");
 							} else {
-								$this->write("PRIVMSG {$this->requester} :I don't know enough about {$input}\r\n");
+								$this->write("PRIVMSG {$this->requester} :I don't know anything about {$input}\r\n");
 							}
 						}
 					}
 				}
 				return false;
 				break;
-			case 'forget':
-				$Tell = ClassRegistry::init('Tell');
-				if ($Tell->delete($Tell->field('id', array('keyword' => $params[1])))) {
-					unset($Tell);
-					return "It's almost like I didn't know a thing about {$params[1]}";
-				}
-				else {
-					unset($Tell);
-					$this->out("There was an error deleting the tell");
-					return "There was an error deleting the tell";
-				}
-				break;
-				// There are no built in functions that they want, check the plugins and the tell database
-			default:
-				//Check for a plugin before querying the DB
-				$preAppend = "";
-				if (strtolower(@$params[2]) == "about") { // Squelch since param 2 may not exist and this is faster
-					$user = $params[1];
-					$tell = $params[3];
-					$preAppend = "$user: ";
-				}
-				else {
-					$user = $this->requester;
-					$tell = $params[0];
-				}
-				if (isSet($this->hooks[$tell])) {
-					if ($preAppend) { //This is an about
-						$extraParams = array_slice($params, 4);
+				case 'forget':
+					if(in_array(strtolower($this->requester), array('dogmatic69', 'ceeram'))){
+						$Tell = ClassRegistry::init('Tell');
+						if ($Tell->delete($Tell->field('id', array('keyword' => $params[1])))) {
+							unset($Tell);
+							return "It's almost like I didn't know a thing about {$params[1]}";
+						}
 					}
 					else {
-						$extraParams = array_slice($params, 1);
+						unset($Tell);
+						$this->out("There was an error deleting the tell");
+						return "There was an error deleting the tell";
 					}
-					return $preAppend.call_user_func_array($this->hooks[$tell], am(array($user), $extraParams));
-				}
-				unset ($preAppend);
-				$Tell = ClassRegistry::init('Tell');
-				$message = $Tell->field('message', array('keyword' => $tell));
-				unset($Tell);
-				if ($message) {
-					return "{$user}: {$tell} is {$message}";
-				}
-				else {
-					return "{$user}: I don't know enough about {$tell}";
-				}
+				break;
+				// There are no built in functions that they want, check the plugins and the tell database
+				default:
+					//Check for a plugin before querying the DB
+					$preAppend = "";
+					if (strtolower(@$params[2]) == "about") { // Squelch since param 2 may not exist and this is faster
+						$user = $params[1];
+						$tell = $params[3];
+						$preAppend = "$user: ";
+					}
+					else {
+						$user = $this->requester;
+						$tell = $params[0];
+					}
+					if (isSet($this->hooks[$tell])) {
+						if ($preAppend) { //This is an about
+							$extraParams = array_slice($params, 4);
+						}
+						else {
+							$extraParams = array_slice($params, 1);
+						}
+						return $preAppend.call_user_func_array($this->hooks[$tell], am(array($user), $extraParams));
+					}
+					unset ($preAppend);
+					$Tell = ClassRegistry::init('Tell');
+					$message = $Tell->field('message', array('keyword' => $tell));
+					unset($Tell);
+					if ($message) {
+						return "{$user}: {$tell} is {$message}";
+					}
+					else {
+						return "{$user}: I don't know enough about {$tell}";
+					}
 				break;
 			}
 		}

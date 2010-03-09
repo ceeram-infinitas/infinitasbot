@@ -61,8 +61,11 @@ class PhpCommandTask extends Object {
  * @return string the message to send to the user/channel
  * @access public
  */
-	function execute($userName, $function) {
-		return "For more info on {$function} go to http://www.php.net/{$function}";
+	function execute($userName, $function = null) {
+		if($function){
+			return "For more info on {$function} go to http://www.php.net/{$function}";
+		}
+		return "For more info go to http://www.php.net/";
 	}
 }
 ?>

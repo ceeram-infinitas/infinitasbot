@@ -38,14 +38,13 @@
 class IrcShell extends Shell {
 	var $tasks = array(
 		'Bot',
-		'SVNCommand',
 		'BinCommand',
 		'PhpCommand',
 		'ApiCommand',
 		'ApilookupCommand',
 		'GoogleCommand',
-		'TracCommand',
-		'BookCommand'
+		'PullCommand',
+		'TicketsCommand'
 	);
 /**
  * Not implemented
@@ -76,7 +75,7 @@ class IrcShell extends Shell {
 		if (isset($this->args[0])) {
 			$this->Bot->nick = $this->args[0];
 		} else {
-			$this->Bot->nick = 'CakeBot';
+			$this->Bot->nick = 'InfinitasBot';
 		}
 		// It might be fun to say something every now and again like say, SVN commits
 		//$this->Bot->setCallback();
