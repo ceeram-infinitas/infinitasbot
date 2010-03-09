@@ -70,7 +70,7 @@ class TicketsCommandTask extends Object {
 	function execute($userName = null, $query = null) {
 		$args = func_num_args(); 
 		if($args == 1) {// when user types ~tickets
-			return 'Submit your ticket here: http://infinitas.lighthouseapp.com/projects/43419-infinitas/tickets';
+			return 'Submit your ticket here: http://infinitas.lighthouseapp.com/projects/43419-infinitas/tickets/new';
 		} elseif ($args == 0){// for the ping hook
 			$HttpSocket = new HttpSocket();
 			$xml = new Xml($HttpSocket->get('http://infinitas.lighthouseapp.com/events.atom'));
