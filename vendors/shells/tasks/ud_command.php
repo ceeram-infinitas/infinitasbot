@@ -90,14 +90,14 @@ class UdCommandTask extends Object {
 			}
 			$contents = substr($contents, $start, $end - $start);
 			$contents = html_entity_decode(strip_tags($contents));
-			$contents = $term . ' means: ' . trim(preg_replace('/[\r\n\t ]+/', ' ', $contents));
+			$contents = $term . ' means ' . trim(preg_replace('/[\r\n\t ]+/', ' ', $contents));
 			/**
 			* Not sure why, but this seems to be the magic number for
 			* ensuring that the text isn't truncated. The hostmask isn't
 			* included in what's sent to the server. The maximum message
 			* length should be 510 characters according to the IRC RFC.
 			*/
-			$max = 445 - strlen($userName) - 1;
+			$max = 445 - strlen($userName) - 2;
 			if (strlen($contents) > $max) {
 				$contents = substr($contents, 0, $max);
 				$end = strrpos($contents, ' ');
@@ -106,7 +106,7 @@ class UdCommandTask extends Object {
 				}
 				$contents = substr($contents, 0, $end) . '...';
 			}
-			$out = $userName . ' ' . $contents;
+			$out = $userName . ': ' . $contents;
 
 			return $out;
 		}
