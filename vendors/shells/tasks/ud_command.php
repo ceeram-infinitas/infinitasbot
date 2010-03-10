@@ -30,7 +30,7 @@ App::import('Core', 'HttpSocket');
 App::import('Core', 'Xml');
 
 /**
- * This is the ~ticket command
+ * This is the ~ud command
  *
  *
  * @package       cakebot
