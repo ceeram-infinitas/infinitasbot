@@ -68,51 +68,15 @@ class UdCommandTask extends Object {
 	function execute($userName = null, $query = null) {
 		$args = func_num_args(); 
 		if($args == 1) {// when user types ~ud
-			//return 'Submit your ticket here: http://infinitas.lighthouseapp.com/projects/43419-infinitas/tickets';
+			return 'http://www.urbandictionary.com/';
 		} elseif ($args == 0){// for the ping hook
-/*			$HttpSocket = new HttpSocket();
-			$xml = new Xml($HttpSocket->get('http://infinitas.lighthouseapp.com/events.atom'));
-			$results = $xml->toArray();
-			unset($xml, $HttpSocket);
-			$i = 0;
-			$count = count($results['Feed']['Entry']);
-			$tickets = $changesets = array();
-			$updated  = Configure::read('updated');
-			while($i<$count-27 && $results['Feed']['Entry'][$i]['updated'] != $updated) {
-				$result = $results['Feed']['Entry'][$i];
-				if(strpos($result['Link']['href'], 'tickets') !== false) {
-					$title = str_replace(array('&#147;', '&#148;', '&#x2192;', '#'), array("'", "'" ,'->'), html_entity_decode(strip_tags($result['title']['value'])));
-					$content = str_replace(array('&#147;', '&#148;', '&#x2192;', '#'), array("'", "'" ,'->'), html_entity_decode(strip_tags(str_replace('</p><p>', ', ', $result['content']['value']))));
-					if(strlen($content)>45) {
-						$content = substr($content, 0, 45) . '...';
-					}
-					if(strpos($result['Author']['name'], 'dogmatic') !== false) {
-						$content .= ' By: Infinitas';
-					} else {
-						$content .= ' By: ' . $result['Author']['name'];
-					}
-					$link = $result['Link']['href'];
-					$tickets[] = array('text' => "Ticket: {$title} : {$content}", 'link' => $link);
-					//debug(array('text' => "Ticket: {$title} : {$content}", 'link' => $link));
-				} elseif (strpos($result['Link']['href'], 'changesets') !== false) {
-					
-					//$changesets[] = '';//@todo implement changesets
-				}
-				$i++;
-			}
-			Configure::write('updated', $results['Feed']['Entry'][0]['updated']);
-			//$return = array('tickets' => array_reverse($tickets));
- 			$return = array_reverse($tickets);
-			unset($results, $i, $count, $tickets, $updated, $result, $title, $content, $link, $changesets);
-			return $return;
-*/		}
-		// when users type: ~tickets searchkeys
+		}
+		// when users type: ~ud searchkeys
 		$term = urlencode(implode(array_splice(func_get_args(), 1), " "));
 		$url = 'http://www.urbandictionary.com/define.php?term=' . $term;
 		$HttpSocket = new HttpSocket();
 		$contents = $HttpSocket->get($url);
-		//$url = 'http://www.urbandictionary.com/define.php?term=' . urlencode($term);
-        //$contents = @file_get_contents($url);
+
 		if ($contents === false) {
 			return 'Urban Dictionary is currently inaccessible';
 		} elseif (strpos($contents, 'isn\'t defined') !== false) {
@@ -146,25 +110,6 @@ class UdCommandTask extends Object {
 
 			return $out;
 		}
-
-
-/*		$xml = new Xml($HttpSocket->get('http://infinitas.lighthouseapp.com/tickets.xml?q=' . $searchString));
-		$results = $xml->toArray();
-		unset($xml, $HttpSocket);
-		if(!isset($results['Tickets'])){
-			unset($results);
-			return "No tickets found.";
-		}
-		$count = count($results['Tickets']['Ticket']);
-		if(isset($results['Tickets']['Ticket'][0])) {
-			$out = sprintf("%d tickets found. To see the tickets go to: http://infinitas.lighthouseapp.com/tickets?q=%s", $count, $searchString);
-			unset($results, $count, $searchString);
-			return $out;
-		}
-		$out = sprintf("1 ticket found. To see the ticket go to: %s", $results['Tickets']['Ticket']['url']);
-		unset($results);
-		return $out;
- */
 	}
 }
 ?>
