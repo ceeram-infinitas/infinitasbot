@@ -326,6 +326,11 @@ class BotTask extends CakeSocket {
 			//create an array of the paramiters from the call offset by the location of the first ~
 			$params = explode(" ", substr($msg, strpos($msg, "~") + 1));
 			switch ($params[0]) {
+				case 'exit':
+					if(strtolower($this->requester) == 'ceeram' || strtolower($this->requester) == 'dogmatic69'){
+						exit();
+					}
+					break;
 				case 'register':
 					if(strtolower($this->requester) == 'ceeram' || strtolower($this->requester) == 'dogmatic69'){
 						//$this->write("PRIVMSG NickServ :REGISTER password email@domain.com\r\n");
