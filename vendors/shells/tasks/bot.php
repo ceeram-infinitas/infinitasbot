@@ -363,6 +363,13 @@ class BotTask extends CakeSocket {
 					}
 					return false;
 					break;
+				case 'kudos':
+					$user = ClassRegistry::init('User')->find('first', array('conditions' => array('User.username' => $params[1])));
+					if(!empty($user)){
+						return sprintf('%s has %s kudos', $user['User']['username'], $user['User']['points']);
+					}
+					return sprintf('%s does not seem like a valid user', $params[1]);
+					break;
 				case 'topic':
 					if(in_array(strtolower($this->requester), array('ceeram', 'dogmatic69')) && !empty($params[1])){
 						unset($params[0]);
@@ -508,6 +515,49 @@ class BotTask extends CakeSocket {
 				}
 				else {
 					return "$this->requester, I already have a definition for $tell";
+				}
+			}
+		}
+		else if(strstr($msg, '++') || strstr($msg, '--')){
+			$User = ClassRegistry::init('User');
+			$user = $User->find(
+				'first',
+				array(
+					'conditions' => array(
+						'User.username' => str_replace(array('++', '--'), '', $msg)
+					)
+				)
+			);
+
+			if(rand(0, 100) == 69){
+				$this->_points = array();
+			}
+			
+			$this->_points[$this->requester] = isset($this->_points[$this->requester]) 
+				? $this->_points[$this->requester]
+				: array();
+
+			if(!empty($user)){
+				if(!in_array($user['User']['username'], $this->_points[$this->requester])){
+					if($this->requester == $user['User']['username']){
+						$user['User']['points']--;
+					}
+
+					else if(strstr($msg, '--')){
+						$user['User']['points']--;
+					}
+
+					else if(strstr($msg, '++')){
+						$user['User']['points']++;
+					}
+
+					$this->_points[$this->requester][] = $user['User']['username'];
+					if($User->save($user)){
+						return sprintf('%s has %s kudos', $user['User']['username'], $user['User']['points']);
+					}
+				}
+				else{
+					return sprintf('%s cant be that cool', $user['User']['username']);
 				}
 			}
 		}
