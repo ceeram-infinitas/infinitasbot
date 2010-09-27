@@ -365,10 +365,14 @@ class BotTask extends CakeSocket {
 					break;
 				case 'kudos':
 					$user = ClassRegistry::init('User')->find('first', array('conditions' => array('User.username' => $params[1])));
+					$return = sprintf('%s does not seem like a valid user', $params[1]);
+
 					if(!empty($user)){
-						return sprintf('%s has %s kudos', $user['User']['username'], $user['User']['points']);
+						$return = sprintf('%s has %s kudos', $user['User']['username'], $user['User']['points']);
 					}
-					return sprintf('%s does not seem like a valid user', $params[1]);
+
+					unset($user);
+					return $return;
 					break;
 				case 'topic':
 					if(in_array(strtolower($this->requester), array('ceeram', 'dogmatic69')) && !empty($params[1])){
@@ -553,7 +557,9 @@ class BotTask extends CakeSocket {
 
 					$this->_points[$this->requester][] = $user['User']['username'];
 					if($User->save($user)){
-						return sprintf('%s has %s kudos', $user['User']['username'], $user['User']['points']);
+						$return = sprintf('%s has %s kudos', $user['User']['username'], $user['User']['points']);
+						unset($User, $user);
+						return $return;
 					}
 				}
 				else{
