@@ -68,25 +68,14 @@ class PullCommandTask extends Object {
  * @access public
  */
 	function execute($userName = null, $hash = null) {
-		$num_args = func_num_args(); 
-		if($num_args == 1) {// when user types ~tickets
-			return "dogmatic69, please pull the commits from my fork: http://github.com/{$userName}/infinitas/commits/dev";
+		$num_args = func_num_args();
+		if($num_args == 1) {// when user types ~pull
+			return "dogmatic69, please merge my pull request: https://github.com/infinitas/infinitas/pulls/{$userName}";
 		} elseif($num_args == 2 && strlen($hash) == 40) {
 			return "dogmatic69, please pull this commit: http://github.com/{$userName}/infinitas/commit/{$hash}";
-		} elseif ($num_args == 2 && $hash == 'last') {
-			$HttpSocket = new HttpSocket();
-			$xml = new Xml($HttpSocket->get("http://github.com/feeds/{$userName}/commits/infinitas/dev"));
-			$results = $xml->toArray();
-			unset($xml, $HttpSocket);
-			foreach($results['Feed']['Entry'] as $commit){
-				if(strpos(strtolower($commit['Author']['name']), strtolower($userName)) !== false){
-					return "dogmatic69, please pull this commit: " . $commit['Link']['href'];
-				}
-			}
 		} elseif ($num_args == 2 && $hash == 'help') {
-			return 	"Usage: ~pull, will post pull request for dev branch of your fork. ".
-					"~pull last, will post pull request for your last commit. ".
-					"~pull <hash>, will post pull request for the commit with this hash";			
+			return 	"Usage: ~pull, will post link to your pull requests. ".
+					"~pull <hash>, will post pull request for the commit with this hash";
 		}
 	}
 }
